@@ -15,19 +15,60 @@
       padding-top: 7%;
     }
 
-    .titletext {
+    .titletext{
       font-size: 150px;
     }
 
     .npc {
-      background: rgb(215, 255, 240);
+      background: linear-gradient(to bottom right, #fff8d0, #b0eaff);
+      border: 4px solid #146391;
       border-radius: 50%;
       width: 120px;
       height: 120px;
       margin: 0 auto;
       position: relative;
       animation: float 3s ease-in-out infinite;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .npc-face-drawn {
+      width: 60px;
+      height: 60px;
+      background: white;
+      border-radius: 50%;
+      position: relative;
+    }
+
+    .npc-face-drawn::before,
+    .npc-face-drawn::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      background: black;
+      border-radius: 50%;
+      position: absolute;
+      top: 15px;
+    }
+
+    .npc-face-drawn::before {
+      left: 15px;
+    }
+
+    .npc-face-drawn::after {
+      right: 15px;
+    }
+
+    .npc-mouth {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      width: 20px;
+      height: 10px;
+      background: black;
+      border-radius: 10px;
+      transform: translateX(-50%);
     }
 
     .npc::before {
@@ -40,13 +81,6 @@
       top: -10px;
       left: 55px;
       animation: spin 2s linear infinite;
-    }
-
-    .npc-face {
-      position: absolute;
-      width: 100%;
-      top: 25%;
-      font-size: 30px;
     }
 
     @keyframes spin {
@@ -155,40 +189,51 @@
 
 <h1>Quantum Dot Simulator</h1>
 <div class="npc">
-  <div class="npc-face" id="npc-face">😊</div>
+  <div class="npc-face-drawn">
+    <div class="npc-mouth"></div>
+  </div>
 </div>
-<p id="npc-text"><strong>Qu:</strong> Ciao! Sono Qu, il tuo simpatico atomo guida! Pronto a creare qualcosa di brillante? 💫</p>
+<p id="npc-text"><strong>Qu:</strong> Ciao! Sono il tuo Quantum Dot guida! Iniziamo a creare un Quantum Dot passo per passo! 🌟</p>
 
 <div id="game-area">
   <p id="step-text">Passaggio 1: Avvia la sintesi a iniezione calda</p>
   <button onclick="startSynthesis()">Avvia Sintesi</button>
 </div>
 
+<audio id="synth-sound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c68e456449.mp3?filename=notification-95309.mp3"></audio>
+<audio id="compress-sound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_1f2f6954f1.mp3?filename=interface-click-124467.mp3"></audio>
+
 <script>
   const gameArea = document.getElementById('game-area');
   const stepText = document.getElementById('step-text');
   const npcText = document.getElementById('npc-text');
+  const synthSound = document.getElementById('synth-sound');
+  const compressSound = document.getElementById('compress-sound');
 
   function speak(text) {
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.pitch = 1.4;
-    utterance.rate = 1;
-    utterance.lang = 'it-IT';
+    utterance.pitch = 1.5;
+    utterance.rate = 1.1;
+    utterance.voice = speechSynthesis.getVoices().find(voice => voice.name.includes("Google") || voice.name.includes("Microsoft") || voice.default);
     speechSynthesis.speak(utterance);
   }
 
   function startSynthesis() {
-    npcText.innerHTML = '<strong>Qu:</strong> Ottimo! Riscaldiamo tutto! Guarda il termometro! 🌡️';
-    speak("Ottimo! Riscaldiamo tutto! Guarda il termometro!");
-    stepText.textContent = 'Sintesi a iniezione calda in corso...';
+    synthSound.play();
+    npcText.innerHTML = '<strong>Qu:</strong> Ottimo! Stiamo riscaldando tutto, preparati al prossimo passo! 🌡️';
+    speak("Ottimo! Stiamo riscaldando tutto, preparati al prossimo passo!");
+
+    stepText.textContent = 'Sintesi a iniezione calda in corso... Guarda il termometro!';
     gameArea.innerHTML = `<p id="step-text">Sintesi a iniezione calda in corso...!</p>
                           <div class="thermometer"></div>`;
-    setTimeout(quantumConfinement, 4000);
+
+    setTimeout(() => quantumConfinement(), 4000);
   }
 
   function quantumConfinement() {
     npcText.innerHTML = '<strong>Qu:</strong> Ora scegli quanto vuoi confinare il tuo elettrone! ⚡ Più piccolo, più blu!';
     speak("Ora scegli quanto vuoi confinare il tuo elettrone! Più piccolo, più blu!");
+
     stepText.textContent = 'Passaggio 2: Scegli il livello di confinamento quantistico';
     gameArea.innerHTML = `<p id="step-text">Passaggio 2: Scegli il livello di confinamento quantistico</p>
                           <input type="range" id="confinementRange" min="1" max="3" step="1" value="2">
@@ -199,6 +244,8 @@
     const value = document.getElementById('confinementRange').value;
     npcText.innerHTML = '<strong>Qu:</strong> Compressione quantistica in corso... guarda cosa succede! 🔬';
     speak("Compressione quantistica in corso... guarda cosa succede!");
+    compressSound.play();
+
     gameArea.innerHTML = `<div class="compression-animation"></div>`;
 
     setTimeout(() => {
@@ -209,17 +256,17 @@
       if (value == 1) {
         result.classList.add('blue-dot');
         explanation.textContent = 'Hai creato un Quantum Dot BLU! Alta energia, lunghezza d`onda: 400mm, dimensione: piccola';
-        npcText.innerHTML = '<strong>Qu:</strong> Bravissimo! Hai fatto un puntino super energetico! 💙';
+        npcText.innerHTML = '<strong>Qu:</strong> Bravissimo! Hai fatto un puntino super energetico!';
         speak("Bravissimo! Hai fatto un puntino super energetico!");
       } else if (value == 2) {
         result.classList.add('green-dot');
         explanation.textContent = 'Hai creato un Quantum Dot VERDE! Energia intermedia, lunghezza d`onda: 500mm, dimensione: media';
-        npcText.innerHTML = '<strong>Qu:</strong> Grande! Questo è proprio equilibrato! 💚';
+        npcText.innerHTML = '<strong>Qu:</strong> Grande! Questo è proprio equilibrato!';
         speak("Grande! Questo è proprio equilibrato!");
       } else {
         result.classList.add('red-dot');
         explanation.textContent = 'Hai creato un Quantum Dot ROSSO! Bassa energia, lunghezza d`onda: 650mm, dimensione: grande';
-        npcText.innerHTML = '<strong>Qu:</strong> Wow, bello grande e rilassato! ❤️';
+        npcText.innerHTML = '<strong>Qu:</strong> Wow, bello grande e rilassato!';
         speak("Wow, bello grande e rilassato!");
       }
 
