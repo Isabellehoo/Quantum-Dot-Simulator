@@ -92,10 +92,14 @@
       border-radius: 50%;
       margin: 20px auto;
       animation: pulse 2s infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
     }
 
     .blue-dot { background: #00f; }
-    .green-dot { background: #0f0; }
+    .green-dot { background: #0f0; color: black; }
     .red-dot { background: #f00; }
 
     @keyframes pulse {
@@ -171,24 +175,16 @@
   <button onclick="startSynthesis()">Avvia Sintesi</button>
 </div>
 
-<audio id="sfx-heat" src="https://cdn.pixabay.com/download/audio/2022/03/16/audio_dcf8822bfa.mp3" preload="auto"></audio>
-<audio id="sfx-compress" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7c1a7490f0.mp3" preload="auto"></audio>
-<audio id="sfx-dot" src="https://cdn.pixabay.com/download/audio/2022/03/16/audio_13d4542e9f.mp3" preload="auto"></audio>
-
 <script>
   const gameArea = document.getElementById('game-area');
   const stepText = document.getElementById('step-text');
   const npcText = document.getElementById('npc-text');
-  const heatSound = document.getElementById('sfx-heat');
-  const compressSound = document.getElementById('sfx-compress');
-  const dotSound = document.getElementById('sfx-dot');
 
   function startSynthesis() {
     npcText.innerHTML = '<strong>Qu:</strong> Ottimo! Stiamo riscaldando tutto, preparati al prossimo passo! 🌡️';
     stepText.textContent = 'Sintesi a iniezione calda in corso...';
     gameArea.innerHTML = `<p id="step-text">Sintesi a iniezione calda in corso...!</p>
                           <div class="thermometer"></div>`;
-    heatSound.play();
 
     setTimeout(() => {
       quantumConfinement();
@@ -207,7 +203,6 @@
     const value = document.getElementById('confinementRange').value;
     npcText.innerHTML = '<strong>Qu:</strong> Compressione quantistica in corso... guarda cosa succede! 🔬';
     gameArea.innerHTML = `<div class="compression-animation"></div>`;
-    compressSound.play();
 
     setTimeout(() => {
       const result = document.createElement('div');
@@ -216,19 +211,20 @@
 
       if (value == 1) {
         result.classList.add('blue-dot');
+        result.textContent = '◉ _ ◉';
         explanation.textContent = 'Hai creato un Quantum Dot BLU! Alta energia, lunghezza d`onda: 400mm, dimensione: piccola';
         npcText.innerHTML = '<strong>Qu:</strong> Bravissimo! Hai fatto un puntino super energetico! 💙';
       } else if (value == 2) {
         result.classList.add('green-dot');
+        result.textContent = ' > ε < ';
         explanation.textContent = 'Hai creato un Quantum Dot VERDE! Energia intermedia, lunghezza d`onda: 500mm, dimensione: media';
         npcText.innerHTML = '<strong>Qu:</strong> Grande! Questo è proprio equilibrato! 💚';
       } else {
         result.classList.add('red-dot');
+        result.textContent = '◕ ‿ ↼';
         explanation.textContent = 'Hai creato un Quantum Dot ROSSO! Bassa energia, lunghezza d`onda: 650mm, dimensione: grande';
         npcText.innerHTML = '<strong>Qu:</strong> Wow, bello grande e rilassato! ❤️';
       }
-
-      dotSound.play();
 
       const message = document.createElement('p');
       message.textContent = 'Qu: Vuoi riprovare e crearne uno diverso? 😄';
