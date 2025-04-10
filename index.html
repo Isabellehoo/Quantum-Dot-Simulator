@@ -211,18 +211,20 @@
 
       if (value == 1) {
         result.classList.add('blue-dot');
-        result.textContent = '◉ _ ◉';
+        result.textContent = '> ε <';
+         result.style.color = 'rgb(0,0,77)';
         explanation.textContent = 'Hai creato un Quantum Dot BLU! Alta energia, lunghezza d`onda: 400mm, dimensione: piccola';
         npcText.innerHTML = '<strong>Qu:</strong> Bravissimo! Hai fatto un puntino super energetico! 💙';
       } else if (value == 2) {
         result.classList.add('green-dot');
-        result.textContent = ' > ε < ';
-        result.style.color = 'white';
+        result.textContent = ' ¬ ‿ ¬ ';
+        result.style.color = 'rgb(13,77,0)';
         explanation.textContent = 'Hai creato un Quantum Dot VERDE! Energia intermedia, lunghezza d`onda: 500mm, dimensione: media';
         npcText.innerHTML = '<strong>Qu:</strong> Grande! Questo è proprio equilibrato! 💚';
       } else {
         result.classList.add('red-dot');
         result.textContent = '◕ ‿ ↼';
+         result.style.color = 'rgb(102,0,0)';
         explanation.textContent = 'Hai creato un Quantum Dot ROSSO! Bassa energia, lunghezza d`onda: 650mm, dimensione: grande';
         npcText.innerHTML = '<strong>Qu:</strong> Wow, bello grande e rilassato! ❤️';
       }
